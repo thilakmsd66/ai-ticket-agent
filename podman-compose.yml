@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Containerfile
+    container_name: ai-ticket-backend
+    env_file:
+      - ./backend/.env
+    environment:
+      FRONTEND_ORIGINS: http://localhost:3000
+      APP_URL: http://localhost:3000
+    volumes:
+      - ./backend/tickets.db:/app/tickets.db
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Containerfile
+      args:
+        VITE_API_BASE_URL: http://localhost:8080
+    container_name: ai-ticket-frontend
+    depends_on:
+      - backend
+    ports:
+      - "3000:80"
+    restart: unless-stopped

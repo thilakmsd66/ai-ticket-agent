@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="AI Ticket Agent neon icon">
+  <defs>
+    <radialGradient id="bg" cx="28%" cy="24%" r="90%">
+      <stop offset="0" stop-color="#1e293b" />
+      <stop offset="1" stop-color="#020617" />
+    </radialGradient>
+    <linearGradient id="ring" x1="22" y1="22" x2="106" y2="106" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#22d3ee" />
+      <stop offset="0.55" stop-color="#06b6d4" />
+      <stop offset="1" stop-color="#34d399" />
+    </linearGradient>
+    <linearGradient id="core" x1="40" y1="36" x2="88" y2="92" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f0fdfa" />
+      <stop offset="1" stop-color="#ccfbf1" />
+    </linearGradient>
+  </defs>
+
+  <rect x="8" y="8" width="112" height="112" rx="28" fill="url(#bg)" />
+  <circle cx="64" cy="64" r="42" fill="none" stroke="url(#ring)" stroke-width="7" />
+  <path d="M39 43h50a7 7 0 0 1 7 7v7a8 8 0 0 0 0 14v7a7 7 0 0 1-7 7H39a7 7 0 0 1-7-7v-7a8 8 0 0 0 0-14v-7a7 7 0 0 1 7-7Z" fill="url(#core)" />
+  <rect x="48" y="51" width="32" height="5" rx="2.5" fill="#0f172a" opacity="0.8" />
+  <rect x="48" y="61" width="10" height="10" rx="2" fill="#0f172a" opacity="0.82" />
+  <rect x="61" y="61" width="10" height="10" rx="2" fill="#0f172a" opacity="0.82" />
+  <rect x="74" y="61" width="10" height="10" rx="2" fill="#0f172a" opacity="0.82" />
+  <path d="M64 73v7" stroke="#0f172a" stroke-width="3" stroke-linecap="round" opacity="0.78" />
+
+  <path d="M22 56h8m0 16h-8m90-16h8m0 16h-8" stroke="#22d3ee" stroke-width="3" stroke-linecap="round" opacity="0.86" />
+  <circle cx="31" cy="30" r="3" fill="#34d399" />
+  <circle cx="97" cy="98" r="3" fill="#22d3ee" />
+</svg>
