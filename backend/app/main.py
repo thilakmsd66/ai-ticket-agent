@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, EmailStr, Field
 
-from .agents import ALLOW_LOCAL_FALLBACK, call_aicafe, clarification_agent, classification_agent
+from .agents import call_aicafe, clarification_agent, classification_agent
 from .auth import (
     create_access_token,
     generate_token,
@@ -158,7 +158,6 @@ async def aicafe_health():
         return {
             "status": "up",
             "aicafe_enabled": True,
-            "fallback_enabled": ALLOW_LOCAL_FALLBACK,
             "detail": "AICafe service is reachable",
             "sample": (response or "")[:120],
         }
@@ -168,7 +167,6 @@ async def aicafe_health():
             content={
                 "status": "down",
                 "aicafe_enabled": False,
-                "fallback_enabled": ALLOW_LOCAL_FALLBACK,
                 "detail": str(exc),
             },
         )
@@ -245,11 +243,25 @@ async def chat_endpoint(request: ChatRequest):
         raise HTTPException(status_code=500, detail="Unexpected server error while processing ticket") from exc
 
 
+@app.get("/chat")
+def chat_endpoint_help():
+    return {
+        "detail": "Use POST /chat with JSON body: {\"message\": \"...\", \"history\": []}",
+        "method": "POST",
+        "content_type": "application/json",
+    }
+
+
 @app.get("/tickets", response_model=List[TicketRead])
 def list_tickets():
     with SessionLocal() as session:
         tickets = session.query(Ticket).order_by(Ticket.id.desc()).all()
         return tickets
+
+
+@app.head("/tickets")
+def tickets_head():
+    return JSONResponse(status_code=200, content={})
 
 
 @app.put("/tickets/{ticket_number}", response_model=TicketRead)

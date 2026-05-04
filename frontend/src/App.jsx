@@ -117,7 +117,7 @@ function AppShell({ currentUser, onLogout, submitFeedbackApi }) {
 
     const checkBackendReachability = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/tickets`, { method: 'HEAD' })
+        const response = await fetch(`${API_BASE_URL}/health/aicafe`, { method: 'GET' })
         if (isMounted) {
           setIsBackendReachable(response.ok)
         }
