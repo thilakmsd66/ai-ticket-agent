@@ -273,7 +273,12 @@ function AppShell({ currentUser, onLogout, submitFeedbackApi }) {
     }
   }
 
-  const history = tickets.map((ticket) => ticket.original_message)
+  // Keep only the most recent, compact context to control token usage.
+  const history = tickets
+    .slice(0, 3)
+    .map((ticket) => (ticket.original_message || '').trim())
+    .filter(Boolean)
+    .map((text) => (text.length > 220 ? `${text.slice(0, 220)}...` : text))
 
   const submitTicketWithInput = async (inputMessage) => {
     const trimmedMessage = inputMessage.trim()
