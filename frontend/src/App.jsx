@@ -439,7 +439,6 @@ function AppShell({ currentUser, onLogout, submitFeedbackApi }) {
   }
 
   const pendingClarificationCount = pendingOriginalMessage ? 1 : 0
-  const routedCount = tickets.filter((ticket) => !ticket.clarification_needed).length
   const highPriorityCount = tickets.filter((ticket) => ticket.priority === 'P1').length
   const measuredResponseTimes = tickets
     .map((ticket) => Number(ticket.response_time_ms))
@@ -448,24 +447,6 @@ function AppShell({ currentUser, onLogout, submitFeedbackApi }) {
     ? Math.round(measuredResponseTimes.reduce((sum, value) => sum + value, 0) / measuredResponseTimes.length)
     : null
   const latestTicketNumber = tickets[0]?.ticket_number || 'No tickets yet'
-
-  const heroMetrics = [
-    {
-      label: 'Tickets Processed',
-      value: tickets.length,
-      icon: 'confirmation_number',
-    },
-    {
-      label: 'Auto Routed',
-      value: routedCount,
-      icon: 'route',
-    },
-    {
-      label: 'Pending Clarification',
-      value: pendingClarificationCount,
-      icon: 'help_outline',
-    },
-  ]
 
   const heroSignals = [
     {
@@ -566,7 +547,7 @@ function AppShell({ currentUser, onLogout, submitFeedbackApi }) {
       <header className="app-header">
         <div className="brand-group">
           <div className="brand-mark">
-            <img src={activeIcon.src} alt="AI Ticket Agent" className="brand-mark-icon" />
+            <img src={activeIcon.src} alt="IntelliTriage" className="brand-mark-icon" />
           </div>
           <div className="brand-copy">
             <p className="eyebrow">
@@ -574,9 +555,9 @@ function AppShell({ currentUser, onLogout, submitFeedbackApi }) {
                 className={isBackendReachable ? 'ai-heartbeat-dot online' : 'ai-heartbeat-dot offline'}
                 aria-hidden="true"
               />
-              AI Ticket Agent
+              IntelliTriage
             </p>
-            <h1>Fast, intelligent ticket routing with real-time AI insights</h1>
+            <h1>AI‑Powered brilliance—where every ticket begins with clarity and purpose</h1>
           </div>
         </div>
         <p>
@@ -596,16 +577,27 @@ function AppShell({ currentUser, onLogout, submitFeedbackApi }) {
           ))}
         </div>
 
-        <div className="hero-metrics" aria-label="Ticketing highlights">
-          {heroMetrics.map((metric) => (
-            <article key={metric.label} className="hero-metric-card">
-              <span className="material-symbols-outlined">{metric.icon}</span>
-              <div>
-                <p className="hero-metric-value">{metric.value}</p>
-                <p className="hero-metric-label">{metric.label}</p>
-              </div>
-            </article>
-          ))}
+        <div className="hero-features">
+          <article className="feature-card feature-card-ai">
+            <span className="material-symbols-outlined">smart_toy</span>
+            <h4>AI-Powered Routing</h4>
+            <p>Intelligent classification and team assignment in seconds</p>
+          </article>
+          <article className="feature-card feature-card-clarify">
+            <span className="material-symbols-outlined">question_answer</span>
+            <h4>Auto Clarification</h4>
+            <p>Smart follow-up questions to gather context automatically</p>
+          </article>
+          <article className="feature-card feature-card-speed">
+            <span className="material-symbols-outlined">speed</span>
+            <h4>Real-Time Processing</h4>
+            <p>Sub-second response times with priority-aware handling</p>
+          </article>
+          <article className="feature-card feature-card-insights">
+            <span className="material-symbols-outlined">trending_up</span>
+            <h4>Live Analytics</h4>
+            <p>Track team performance and urgency trends in real-time</p>
+          </article>
         </div>
       </header>
 

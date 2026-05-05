@@ -63,7 +63,7 @@ export default function AuthPage({ onAuthSuccess, defaultTab = 'login', resetTok
             <span className="material-symbols-outlined">smart_toy</span>
           </span>
           <div>
-            <span className="auth-brand-title">AI Ticket Agent</span>
+            <span className="auth-brand-title">IntelliTriage</span>
             <span className="auth-brand-sub">Intelligent Support Platform</span>
           </div>
         </div>

@@ -68,8 +68,8 @@ export default function NavBar({
   return (
     <nav className="app-nav">
       <div className="nav-logo">
-        <img src={brandIconSrc} alt="AI Ticket Agent" className="nav-logo-icon" />
-        <span>AI Ticket Agent</span>
+        <img src={brandIconSrc} alt="IntelliTriage" className="nav-logo-icon" />
+        <span>IntelliTriage</span>
       </div>
       <div className="nav-actions">
         <span className="icon-theme-label" aria-live="polite">

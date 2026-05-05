@@ -3,6 +3,7 @@ import os
 import sys
 
 import httpx
+from groq import Groq
 from dotenv import load_dotenv
 
 
@@ -17,51 +18,40 @@ def _required_env(name: str) -> str:
 
 
 async def main() -> int:
-    api_key = _required_env("API_KEY")
-    base_url = os.getenv("AICAFE_BASE_URL", "https://aicafe.hcl.com").strip()
-    deployment = os.getenv("AICAFE_DEPLOYMENT_NAME", "gpt-4.1").strip()
-    api_version = os.getenv("AICAFE_API_VERSION", "2024-02-15-preview").strip()
-    verify_ssl = os.getenv("AICAFE_VERIFY_SSL", "true").lower() in ("1", "true", "yes")
+    api_key = os.getenv("GROQ_API_KEY") or os.getenv("API_KEY") or os.getenv("api_key")
+    if not api_key:
+        raise RuntimeError("Missing GROQ_API_KEY/API_KEY in environment.")
 
-    endpoint = (
-        f"{base_url}/AICafeService/api/v1/subscription/openai/deployments/"
-        f"{deployment}/chat/completions?api-version={api_version}"
-    )
-
-    payload = {
-        "messages": [
-            {"role": "system", "content": "You are a concise assistant."},
-            {"role": "user", "content": "Reply with exactly: AI_TEST_OK"},
-        ],
-        "temperature": 0.0,
-        "max_tokens": 20,
-    }
+    model = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile").strip()
+    verify_ssl = os.getenv("GROQ_VERIFY_SSL", os.getenv("AICAFE_VERIFY_SSL", "true")).lower() in ("1", "true", "yes")
 
     try:
-        async with httpx.AsyncClient(verify=verify_ssl, timeout=30.0) as client:
-            response = await client.post(
-                endpoint,
-                headers={
-                    "Content-Type": "application/json",
-                    "api-key": api_key,
-                },
-                json=payload,
-            )
+        if verify_ssl:
+            client = Groq(api_key=api_key)
+        else:
+            client = Groq(api_key=api_key, http_client=httpx.Client(verify=False, timeout=30.0))
+        completion = client.chat.completions.create(
+            messages=[
+                {"role": "system", "content": "You are a concise assistant."},
+                {"role": "user", "content": "Reply with exactly: AI_TEST_OK"},
+            ],
+            model=model,
+            max_tokens=20,
+            temperature=0,
+            top_p=1,
+            stream=True,
+            stop=None,
+        )
 
-        print(f"STATUS: {response.status_code}")
-        print(f"ENDPOINT: {endpoint}")
+        reply = ""
+        for chunk in completion:
+            if chunk.choices and chunk.choices[0].delta and chunk.choices[0].delta.content:
+                reply += chunk.choices[0].delta.content
 
-        body_preview = response.text[:500].replace("\n", " ")
-        print(f"BODY_PREVIEW: {body_preview}")
-
-        if response.status_code >= 400:
-            return 1
-
-        data = response.json()
-        content = ""
-        if data.get("choices"):
-            content = data["choices"][0].get("message", {}).get("content", "")
-        print(f"MODEL_REPLY: {content}")
+        print("STATUS: 200")
+        print(f"MODEL: {model}")
+        print(f"SSL_VERIFY: {verify_ssl}")
+        print(f"MODEL_REPLY: {reply.replace('</s>', '').strip()}")
         return 0
     except Exception as exc:
         print(f"ERROR: {exc}")

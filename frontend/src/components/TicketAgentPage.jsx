@@ -264,18 +264,44 @@ export default function TicketAgentPage({
       )}
 
       {isClarifying && (
-        <div className="clarification-banner">
-          <div className="clarification-pill">Clarification</div>
-          <p className="clarification-text">
-            <strong>Question:</strong> {clarificationQuestion}
-          </p>
-          <button type="button" className="clarification-voice-button" onClick={onSpeakClarification}>
-            <span className="material-symbols-outlined">volume_up</span>
-            Listen to question
-          </button>
-          <p className="clarification-context">
-            <strong>Original request:</strong> {pendingOriginalMessage}
-          </p>
+        <div className="clarification-banner clarification-active">
+          <div className="clarification-header">
+            <div className="clarification-pill">
+              <span className="material-symbols-outlined icon-blink">
+                chat_bubble
+              </span>
+              Clarification Needed
+            </div>
+            <span className="material-symbols-outlined clarification-indicator">
+              help
+            </span>
+          </div>
+          <div className="clarification-content">
+            <div className="clarification-question-box">
+              <span className="material-symbols-outlined question-icon">
+                help_outline
+              </span>
+              <div>
+                <p className="clarification-label">AI Question:</p>
+                <p className="clarification-text">
+                  {clarificationQuestion}
+                </p>
+              </div>
+            </div>
+            <button type="button" className="clarification-voice-button" onClick={onSpeakClarification}>
+              <span className="material-symbols-outlined audio-wave">volume_up</span>
+              <span>Listen to question</span>
+            </button>
+          </div>
+          <div className="clarification-original">
+            <span className="material-symbols-outlined original-icon">
+              message
+            </span>
+            <div>
+              <p className="original-label">Your original request:</p>
+              <p className="original-text">{pendingOriginalMessage}</p>
+            </div>
+          </div>
         </div>
       )}
 
@@ -315,10 +341,17 @@ export default function TicketAgentPage({
           value={message}
           rows={4}
           onChange={(event) => setMessage(event.target.value)}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter' && (event.ctrlKey || event.metaKey)) {
+              if (!isLoading && message.trim()) {
+                submitTicket()
+              }
+            }
+          }}
           placeholder={
             isClarifying
-              ? 'Type your answer to the clarification question here.'
-              : 'E.g. Users cannot upload invoices, and we need this fixed before EOD.'
+              ? 'Type your answer to the clarification question here. (Ctrl+Enter to submit)'
+              : 'E.g. Users cannot upload invoices, and we need this fixed before EOD. (Ctrl+Enter to submit)'
           }
         />
 
@@ -344,24 +377,28 @@ export default function TicketAgentPage({
 
       {!isClarifying && (
         <div className="ticket-routing-strip">
-          <div className="ticket-routing-step">
-            <span className="material-symbols-outlined">psychology</span>
-            <span>AI Analyses</span>
+          <div className="ticket-routing-step routing-step-1">
+            <span className="routing-icon material-symbols-outlined">psychology</span>
+            <span className="routing-label">AI Analyses</span>
+            <span className="step-dot"></span>
           </div>
           <span className="ticket-routing-arrow material-symbols-outlined">arrow_forward</span>
-          <div className="ticket-routing-step">
-            <span className="material-symbols-outlined">hub</span>
-            <span>Routes & Clarifies</span>
+          <div className="ticket-routing-step routing-step-2">
+            <span className="routing-icon material-symbols-outlined">hub</span>
+            <span className="routing-label">Routes & Clarifies</span>
+            <span className="step-dot"></span>
           </div>
           <span className="ticket-routing-arrow material-symbols-outlined">arrow_forward</span>
-          <div className="ticket-routing-step">
-            <span className="material-symbols-outlined">groups</span>
-            <span>Assigns Team</span>
+          <div className="ticket-routing-step routing-step-3">
+            <span className="routing-icon material-symbols-outlined">groups</span>
+            <span className="routing-label">Assigns Team</span>
+            <span className="step-dot"></span>
           </div>
           <span className="ticket-routing-arrow material-symbols-outlined">arrow_forward</span>
-          <div className="ticket-routing-step">
-            <span className="material-symbols-outlined">task_alt</span>
-            <span>Ticket Created</span>
+          <div className="ticket-routing-step routing-step-4">
+            <span className="routing-icon material-symbols-outlined">task_alt</span>
+            <span className="routing-label">Ticket Created</span>
+            <span className="step-dot final"></span>
           </div>
         </div>
       )}
