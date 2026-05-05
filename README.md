@@ -92,6 +92,12 @@ ai-ticket-agent/
 
 ## Architecture Overview
 
+### Technical Architecture Diagram
+
+![IntelliTriage Technical Architecture](docs/architecture-diagram.png)
+
+Vector version: [docs/architecture-diagram.svg](docs/architecture-diagram.svg)
+
 ### Frontend
 
 - React 18 + Vite
