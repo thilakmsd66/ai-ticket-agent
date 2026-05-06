@@ -4,7 +4,34 @@ frontend/dist/
 
 # Python
 backend/__pycache__/
+**/__pycache__/
+*.pyc
 backend/.env
+**/*.egg-info/
+
+# Databases
+*.db
+*.db-journal
+
+# Local virtual environments
+.venv/
+
+# Build / packaging artifacts
+IntelliTriage-project-safe.zip
+ppt_media_dump/
+
+# One-off helper scripts (kept locally, not tracked)
+create_project_ppt.py
+create_architecture_diagram.py
+create_echo_architecture_diagram.py
+check_db.py
+backend/_cors_test.py
+backend/invoke_ai_test.py
+backend/seed_tickets.py
+backend/verify_tickets.py
+backend/package-lock.json
+frontend/node_check_react.cjs
+frontend/node_check_react.js
 
 # Editor
 .vscode/
