@@ -8,7 +8,7 @@ The project includes:
 - deterministic clarification guardrails on the backend that validate AI behavior before creating a ticket
 - Podman container support for local packaged execution
 - SQLite storage for local development and demo use
-- a Python script (`create_project_ppt.py`) that produces a branded animated project deck
+- a pre-built branded project deck (`AI-Ticket-Agent-Project-Deck.pptx`)
 
 ## What The App Does
 
@@ -56,15 +56,13 @@ This keeps the conversation deterministic regardless of model variance.
 ai-ticket-agent/
 ├─ README.md
 ├─ podman-compose.yml
-├─ create_project_ppt.py            # builds the branded animated project deck
-├─ AI-Ticket-Agent-Project-Deck.pptx
-├─ ppt_media_dump/                  # background assets for the deck
+├─ AI-Ticket-Agent-Project-Deck.pptx   # branded project deck
+├─ docs/                               # architecture diagrams (PNG + SVG)
 ├─ backend/
 │  ├─ .env.example
 │  ├─ Containerfile
 │  ├─ requirements.txt
 │  ├─ run.ps1
-│  ├─ invoke_ai_test.py
 │  └─ app/
 │     ├─ agents.py
 │     ├─ auth.py
@@ -311,18 +309,10 @@ Expected ticket creation flow:
 
 ## Direct AI Connectivity Test
 
-Use the dedicated backend script to call AICafe directly:
+Check the backend health endpoint to verify AICafe connectivity:
 
 ```powershell
-cd backend
-python invoke_ai_test.py
-```
-
-Or inside the backend image:
-
-```powershell
-cd ..
-podman run --rm --env-file backend/.env localhost/ai-ticket-backend:latest python /app/invoke_ai_test.py
+curl http://localhost:8080/health/aicafe
 ```
 
 This is useful to separate provider issues from app issues.
@@ -338,7 +328,6 @@ This is useful to separate provider issues from app issues.
 
 - In AI-only mode, this means the upstream AI provider rejected or could not process the request
 - Check `GET /health/aicafe`
-- Run `backend/invoke_ai_test.py`
 
 ### AICafe token-limit / suspension error
 
@@ -398,17 +387,6 @@ podman run -d --name ai-ticket-backend --network ai-ticket-net -p 8080:8080 --en
 
 ## Project Presentation Deck
 
-A branded, animated PowerPoint deck is generated from `create_project_ppt.py`.
+A branded, animated PowerPoint deck is included at the repo root: `AI-Ticket-Agent-Project-Deck.pptx`.
 
-```powershell
-cd c:\Users\thilak.l\ai-ticket-agent
-python create_project_ppt.py
-```
-
-Output: `AI-Ticket-Agent-Project-Deck.pptx`.
-
-The deck contains 11 slides — Title, Executive Summary, Architecture, AI Decision Flow, Features, Benefits, APIs, Security, Tech Stack, Roadmap, and Thanks — each with staggered fade-in entrance animations, emoji icon chips, rounded panels, and the dark purple/blue background extracted to `ppt_media_dump/image1.jpeg`. Requires `python-pptx` and `lxml`:
-
-```powershell
-python -m pip install python-pptx lxml
-```
+The deck contains 11 slides — Title, Executive Summary, Architecture, AI Decision Flow, Features, Benefits, APIs, Security, Tech Stack, Roadmap, and Thanks — with staggered fade-in entrance animations, emoji icon chips, rounded panels, and a dark purple/blue background.
